@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import {initializeFirestore} from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAcINpYaXd9Dzx9Kiv5-yJRWWyOr3R-Uoo",
@@ -10,9 +11,12 @@ const firebaseConfig = {
     messagingSenderId: "71636655935",
     appId: "1:71636655935:web:56dbc489c6a07c685a3d8a"
 };
-
+var app;
 if (!firebase.apps.length){
-    firebase.initializeApp(firebaseConfig);
+    app = firebase.initializeApp(firebaseConfig);
 }
+const db = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+});
 
-export { firebase };
+export { firebase, db };

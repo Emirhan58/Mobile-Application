@@ -29,7 +29,7 @@ function App() {
 
   if (initializing) return null;
 
-  if (!user && user.emailVerified){
+  if (!user){
     return (
         <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}/>
