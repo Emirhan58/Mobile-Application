@@ -30,6 +30,8 @@ export default function ForgotPasswordScreen({ navigation, route }) {
 
     function handleEmail(value){
         setEmail(value);
+        setError();
+        setMessage();
     }
 
     function handleSubmit(){
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     },
     arrowStyle: {
         paddingLeft: 10,
-        paddingTop: 30,
+        paddingTop: 40,
         paddingBottom: '50%'
     },
     image: {

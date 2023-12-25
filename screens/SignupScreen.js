@@ -159,6 +159,8 @@ export default function SignupScreen({ navigation }) {
             const userService = new UserService();
             userService.SignUp(formData,  () => {
                 setLoading(false);
+                alert("Verification link has been sent to your email address");
+                navigation.push("Login"); 
             }, (err) => {
                 console.log(err);
                 setLoading(false);
@@ -377,7 +379,7 @@ function PasswordEyeIcon({ pinSecure, setPinSecure }){
 const styles = StyleSheet.create({
     arrowStyle: {
         paddingLeft: 20,
-        paddingTop: 40,
+        paddingTop: 55,
         paddingBottom: '5%'
     },
     container: {

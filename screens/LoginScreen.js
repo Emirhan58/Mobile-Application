@@ -37,10 +37,12 @@ export default function LoginScreen({ navigation }) {
         if(!email){
             goodToGo = false;
             setEmailErr('Required Field');
+            setLoading(false);
         }
         if(!pwd){
             goodToGo = false;
             setPwdErr('Required Field');
+            setLoading(false);
         }
 
         if(goodToGo){
@@ -49,11 +51,11 @@ export default function LoginScreen({ navigation }) {
             userService.LogIn({ email , pwd },  () => {
                 setLoading(false);
             }, (err) => {
-                console.log(err);
+                setPwdErr(`${err}`);
                 setLoading(false);
             });
-
         }
+        
     }
     function handleEmail(value){
         setEmail(value);

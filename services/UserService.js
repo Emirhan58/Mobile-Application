@@ -1,7 +1,5 @@
-import * as SecureStore from 'expo-secure-store';
-import * as MailComposer from "expo-mail-composer";
 import { firebase, db } from '../config';
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 export default class UserService{
 
@@ -32,8 +30,7 @@ export default class UserService{
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                phoneNumber: phoneNumber,
-                password: password
+                phoneNumber: phoneNumber
               }).then(() => {
                     return success(message);
               })
@@ -51,7 +48,13 @@ export default class UserService{
 
         try{
             await firebase.auth().signInWithEmailAndPassword(email, password);
-            return success();
+            if(firebase.auth().currentUser.emailVerified){
+                return success();
+            }
+            else{
+                await firebase.auth().signOut();
+                return error("Please verify your email");
+            }
         } catch(e) {
             return error(e);
         }
@@ -61,34 +64,22 @@ export default class UserService{
     async LogOut(success, error){
 
         try{
-            var content = "Log Out";
-            if( content.message === "Log Out" ){
-                await SecureStore.deleteItemAsync('user');
-                return success();
-            }
-            return error("Unauthorized");
+            await firebase.auth().signOut();
+            return success();
         } catch(e) {
             return error(e);
         }
         
     }
 
-    async codeVerification(object, success, error){
-        try{
-            return success();
-        } catch(e) {
-            return error(e);
-        }
-
-    }
-
     async sendResetRequest(email, success, error){
         try{
-            MailComposer.composeAsync({
-                subject: "Reset",
-                body: "reset",
-                recipients: [email]
-            });
+            firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                success("Password reset email sent");
+            }).catch((err) => {
+                error(err);
+            })
         } catch(e) {
             return error(e);
         }
