@@ -30,7 +30,8 @@ export default class UserService{
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                phoneNumber: phoneNumber
+                phoneNumber: phoneNumber,
+                isAdmin: false
               }).then(() => {
                     return success(message);
               })
@@ -70,6 +71,23 @@ export default class UserService{
             return error(e);
         }
         
+    }
+
+    async getInfo(userUID, success, error){
+        try{
+            let doc = firebase.firestore()
+            .collection('users')
+            .doc(userUID)
+            .get();
+
+            if (!doc.exists){
+                error('No user data found!')
+            } else {
+                return success(doc.data());
+            }
+        } catch(e) {
+            return error(e);
+        }
     }
 
     async sendResetRequest(email, success, error){
