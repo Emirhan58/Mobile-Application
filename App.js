@@ -12,6 +12,7 @@ import SignupScreen from './screens/SignupScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import { Ionicons, MaterialIcons  } from '@expo/vector-icons';
 import AdminPanelScreen from './screens/AdminPanelScreen';
+import HotelScreen from './screens/HotelScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -83,8 +84,8 @@ function App() {
         }}
       />
       <Drawer.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Hotel"
+        component={HotelScreen}
         options={{
           drawerIcon: ({ focused, color, size }) => (
             <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
@@ -102,6 +103,15 @@ function App() {
           }}
         />
       )}
+
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -109,7 +119,6 @@ function App() {
 const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
-      {/* ... (logo veya başlık ekleyebilirsiniz) */}
       <DrawerItemList {...props} />
       <DrawerItem
         label="Logout"

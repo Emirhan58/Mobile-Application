@@ -29,8 +29,7 @@ export default class HotelService{
 
     }
 
-    async DeleteHotel(object, success, error){
-        const hotel = object["hotel"];
+    async DeleteHotel(hotel, success, error){
         const hotelId = hotel["id"];
         try{
             const collectionRef = firebase.firestore().collection('hotels');

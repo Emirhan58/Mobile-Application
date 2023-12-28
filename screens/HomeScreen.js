@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, Text, ScrollView, View, TouchableHighlight, Image, TouchableOpacity } from 'react-native';
 import Global from './Global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { firebase, db } from '../config';
 import HotelService from '../services/HotelService';
 import Loading from './Loading';
+import { useNavigation } from '@react-navigation/native';
+
 
 async function getUserInfo(user){
   try {
@@ -25,10 +28,14 @@ async function getUserInfo(user){
 
 
 
-const HotelItem = ({hotel, userData, onEdit, onDelete }) => {
+const HotelItem = ({hotel, userData, onEdit, onDelete, navigation }) => {
   return (
     <View>
-      <TouchableHighlight underlayColor={'transparent'}>
+      <TouchableHighlight underlayColor={'transparent'}
+        onPress={() => {
+          navigation.navigate('Hotel', {hotel: hotel});
+        }}
+      >
         <View style={styles.container}>
         <View style={styles.imageContainer}>
           <Image
@@ -82,6 +89,7 @@ export default function HomeScreen() {
   const [looking, setLooking] = useState(true);
   const [data, setData] = useState([]);
   const [userData, setUserData] = useState({});
+  const navigation = useNavigation();
 
   function onEdit(hotel){
   
@@ -89,7 +97,7 @@ export default function HomeScreen() {
   
   function onDelete(hotel){
     const hotelService = new HotelService();
-    hotelService.DeleteHotel({ hotel },  () => {
+    hotelService.DeleteHotel( hotel ,  () => {
       alert('Hotel Deleted');
       fetchData();
     }, (err) => {
@@ -119,9 +127,17 @@ export default function HomeScreen() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Buraya ekran odaklandığında yapılmasını istediğiniz işlemleri yazabilirsiniz.
+      fetchData();
+
+      // Unmount işlemi gerçekleştiğinde yapılacak temizleme (opsiyonel)
+      return () => {
+        
+      };
+    }, [])
+  );
 
   return (
     <>
@@ -129,10 +145,10 @@ export default function HomeScreen() {
         <View>
           <Loading />
         </View>
-      ) : (
+      ) : ( 
             <View>
               {data.map((hotel) => (
-                <HotelItem key={hotel.id} hotel={hotel} userData={userData} onEdit={onEdit} onDelete={onDelete} />
+                <HotelItem key={hotel.id} hotel={hotel} userData={userData} onEdit={onEdit} onDelete={onDelete} navigation={navigation} />
               ))}
             </View>
           )
