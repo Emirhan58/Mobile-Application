@@ -7,10 +7,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import UserService from '../services/UserService';
 import Loading from './Loading';
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ function ProfileInfo({ navigation, showHeader }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const user = firebase.auth().currentUser;
 
   async function getUserInfo(user){
@@ -43,15 +45,13 @@ function ProfileInfo({ navigation, showHeader }) {
   }
 
   function updateUserInfo(){
-    firebase.firestore()
-        .collection('users')
-        .doc(user.uid)
-        .set({
-          firstName: firstName,
-          email: user.email,
-          lastName: lastName,
-          phoneNumber: phoneNumber
-        });
+    const userService = new UserService();
+    const userUid = user.uid;
+    const email = user.email;
+    userService.Update({ userUid , isAdmin,  firstName, email, lastName, phoneNumber },  () => {
+    }, (err) => {
+        Alert(`${err}`);
+    });
   }
 
   useEffect(() => {
@@ -63,6 +63,7 @@ function ProfileInfo({ navigation, showHeader }) {
           setFirstName(userData.firstName);
           setLastName(userData.lastName);
           setPhoneNumber(userData.phoneNumber);
+          setIsAdmin(userData.isAdmin);
           setLooking(false);
         } catch (error) {
           console.error('Error:', error.message);

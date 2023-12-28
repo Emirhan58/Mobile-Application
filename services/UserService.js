@@ -90,6 +90,34 @@ export default class UserService{
         }
     }
 
+    async Update(object, success, error){
+
+        const userUID = object["userUid"];
+        const firstName = object["firstName"];
+        const lastName = object["lastName"];
+        const email = object["email"];
+        const phoneNumber = object["phoneNumber"];
+        const isAdmin = object["isAdmin"];
+
+
+        try{
+            firebase.firestore()
+            .collection('users')
+            .doc(userUID)
+            .set({
+                firstName: firstName,
+                email: email,
+                lastName: lastName,
+                phoneNumber: phoneNumber,
+                isAdmin: isAdmin
+            }).then(() => {
+                return success();
+            })
+        } catch(e) {
+            return error(e);
+        }
+    }
+
     async sendResetRequest(email, success, error){
         try{
             firebase.auth().sendPasswordResetEmail(email)

@@ -8,7 +8,8 @@ export default class HotelService{
         const hotelName = object["hotelName"];
         const hotelDescription = object["hotelDescription"];
         const services = object["services"];
-        const prize = object["prize"];
+        const location = object["location"];
+        const price = object["price"];
 
         try{
             const hotelsCollectionRef = collection(db, 'hotels');
@@ -16,7 +17,8 @@ export default class HotelService{
                 name: hotelName,
                 description: hotelDescription,
                 services: services,
-                prize: prize,
+                location: location,
+                price: price,
             }).then(() => {
                 return success();
             });
@@ -25,6 +27,20 @@ export default class HotelService{
             return error(e);
         }
 
+    }
+
+    async DeleteHotel(object, success, error){
+        const hotel = object["hotel"];
+        const hotelId = hotel["id"];
+        try{
+            const collectionRef = firebase.firestore().collection('hotels');
+            await collectionRef.doc(hotelId).delete()
+            .then(() => {
+                return success();
+            });
+        } catch(e) {
+            return error(e);
+        }
     }
 
 }
