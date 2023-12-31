@@ -15,6 +15,8 @@ export default function EditHotelScreen() {
     const [ services, setServices ] = useState(hotel.services);
     const [ price, setPrice ] = useState(hotel.price);
     const [ location, setLocation ] = useState(hotel.location);
+    const [ rooms, setRooms ] = useState('');
+    const [ availableRooms, setAvailableRooms ] = useState('');
 
     useEffect(() => {
         // Update state variables when route.params change
@@ -42,20 +44,27 @@ export default function EditHotelScreen() {
             case "location":
                 setLocation(value);
                 break;
+            case "rooms":
+                setRooms(value);
+                break;
+            case "availableRooms":
+                setAvailableRooms(value);
+                break;
             default:
                 break;
         }
     }
 
     function handleSubmit(){
-        if(hotelName === '' || hotelDescription === '' || services === '' || location === '' || price === ''){
+        if(hotelName === '' || hotelDescription === '' || services === '' || location === '' || price === ''
+        || rooms === '' || availableRooms === ''){
             alert('Please fill all inputs');
             return;
         }
         setLoading(true);
         const hotelService = new HotelService();
         const hotelId = hotel.id;
-        hotelService.EditHotel({hotelId ,hotelName , hotelDescription, services, location, price },  () => {
+        hotelService.EditHotel({hotelId ,hotelName , hotelDescription, services, location, price, rooms, availableRooms },  () => {
             alert('Hotel Edited');
             setLoading(false);
         }, (err) => {
@@ -127,6 +136,24 @@ export default function EditHotelScreen() {
                         value={price}
                         onChangeText={(value) => {
                             handleChange("price", value);
+                        }}/>
+                </View>
+
+                <View style={styles.inputcontainer}>
+                    <TextInput placeholder={"Rooms"}
+                        style={styles.input}
+                        placeholderTextColor={"#CCC"}
+                        onChangeText={(value) => {
+                            handleChange("rooms", value);
+                        }}/>
+                </View>
+
+                <View style={styles.inputcontainer}>
+                    <TextInput placeholder={"Available Rooms"}
+                        style={styles.input}
+                        placeholderTextColor={"#CCC"}
+                        onChangeText={(value) => {
+                            handleChange("availableRooms", value);
                         }}/>
                 </View>
 

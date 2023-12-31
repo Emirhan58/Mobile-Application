@@ -12,6 +12,9 @@ export default function AdminPanelScreen() {
     const [ services, setServices ] = useState('');
     const [ price, setPrice ] = useState('');
     const [ location, setLocation ] = useState('');
+    const [ rooms, setRooms ] = useState('');
+    const [ availableRooms, setAvailableRooms ] = useState('');
+    
     
     function handleChange(name, value){
         switch (name){
@@ -30,19 +33,26 @@ export default function AdminPanelScreen() {
             case "location":
                 setLocation(value);
                 break;
+            case "rooms":
+                setRooms(value);
+                break;
+            case "availableRooms":
+                setAvailableRooms(value);
+                break;
             default:
                 break;
         }
     }
 
     function handleSubmit(){
-        if(hotelName === '' || hotelDescription === '' || services === '' || location === '' || price === ''){
+        if(hotelName === '' || hotelDescription === '' || services === '' || location === '' || price === ''
+         || rooms === '' || availableRooms === ''){
             alert('Please fill all inputs');
             return;
         }
         setLoading(true);
         const hotelService = new HotelService();
-        hotelService.AddHotel({ hotelName , hotelDescription, services, location, price },  () => {
+        hotelService.AddHotel({ hotelName , hotelDescription, services, location, price, rooms, availableRooms },  () => {
             alert('Hotel Created');
             setLoading(false);
         }, (err) => {
@@ -110,6 +120,24 @@ export default function AdminPanelScreen() {
                         placeholderTextColor={"#CCC"}
                         onChangeText={(value) => {
                             handleChange("price", value);
+                        }}/>
+                </View>
+
+                <View style={styles.inputcontainer}>
+                    <TextInput placeholder={"Rooms"}
+                        style={styles.input}
+                        placeholderTextColor={"#CCC"}
+                        onChangeText={(value) => {
+                            handleChange("rooms", value);
+                        }}/>
+                </View>
+
+                <View style={styles.inputcontainer}>
+                    <TextInput placeholder={"Available Rooms"}
+                        style={styles.input}
+                        placeholderTextColor={"#CCC"}
+                        onChangeText={(value) => {
+                            handleChange("availableRooms", value);
                         }}/>
                 </View>
 

@@ -15,6 +15,8 @@ import AdminPanelScreen from './screens/AdminPanelScreen';
 import HotelScreen from './screens/HotelScreen';
 import CheckScreen from './screens/CheckScreen';
 import EditHotelScreen from './screens/EditHotelScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import InvoinceScreen from './screens/InvoinceScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -125,6 +127,22 @@ function App() {
       <Drawer.Screen
         name="Check"
         component={CheckScreen}
+        options={{
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+      />
+      <Drawer.Screen
+        name="Payment"
+        component={PaymentScreen}
+        options={{
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+      />
+      <Drawer.Screen
+        name="Invoince"
+        component={InvoinceScreen}
         options={{
           drawerLabel: () => null,
           drawerIcon: () => null,

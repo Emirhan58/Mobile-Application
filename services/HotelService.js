@@ -10,6 +10,8 @@ export default class HotelService{
         const services = object["services"];
         const location = object["location"];
         const price = object["price"];
+        const rooms = object["rooms"];
+        const availableRooms = object["availableRooms"];
 
         try{
             const hotelsCollectionRef = collection(db, 'hotels');
@@ -19,6 +21,8 @@ export default class HotelService{
                 services: services,
                 location: location,
                 price: price,
+                rooms: rooms,
+                availableRooms: availableRooms
             }).then(() => {
                 return success();
             });
@@ -42,6 +46,8 @@ export default class HotelService{
         }
     }
 
+    
+
     async EditHotel(hotel, success, error){
         const hotelId = hotel["hotelId"];
         const name = hotel["hotelName"];
@@ -49,6 +55,8 @@ export default class HotelService{
         const services = hotel["services"];
         const location = hotel["location"];
         const price = hotel["price"];
+        const rooms = hotel["rooms"];
+        const availableRooms = hotel["availableRooms"];
 
         try{
             firebase.firestore()
@@ -59,10 +67,42 @@ export default class HotelService{
                 description: description,
                 services: services,
                 location: location,
-                price: price
+                price: price,
+                rooms: rooms,
+                availableRooms: availableRooms
             }).then(() => {
                 return success();
             })
+        } catch(e) {
+            return error(e);
+        }
+    }
+
+    async CreateReservation(object, success, error){
+        const hotel = object["hotel"];
+        const paymentInfo = object["paymentInfo"];
+        const userId = object["userId"];
+        const rooms = object["rooms"];
+        const days = object["days"];
+        const checkInDate = object["checkInDate"];
+        const checkOutDate = object["checkOutDate"];
+        const totalPrice = object["totalPrice"];
+        try{
+            const reservationsCollectionRef = collection(db, 'reservations');
+            await addDoc(reservationsCollectionRef, {
+                userId: userId,
+                hotelName: hotel.name,
+                payer: paymentInfo["values"].name,
+                location: hotel.location,
+                days: days,
+                rooms: rooms,
+                checkInDate: checkInDate,
+                checkOutDate: checkOutDate,
+                totalPrice: totalPrice
+            }).then(() => {
+                return success();
+            });
+
         } catch(e) {
             return error(e);
         }
