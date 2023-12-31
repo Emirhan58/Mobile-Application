@@ -8,8 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function Payment() {
     const route = useRoute();
-    const [paymentInfo, setPaymentInfo] = useState({});
     const {hotel, totalPrice, rooms, days, checkInDate, checkOutDate} = route.params;
+    const [paymentInfo, setPaymentInfo] = useState({});
     const navigation = useNavigation();
     const handleCardChange = (formData) => {
         setPaymentInfo(formData);
@@ -21,7 +21,7 @@ export default function Payment() {
             const user = firebase.auth().currentUser;
             const userId = user.uid;
             hotelService.CreateReservation({ hotel: hotel, paymentInfo: paymentInfo, userId: userId, totalPrice: totalPrice, rooms: rooms, days:days, checkInDate: checkInDate, checkOutDate: checkOutDate},  () => {
-                navigation.navigate("Invoince", {hotel: hotel, paymentInfo: paymentInfo, userId: userId, totalPrice: totalPrice, rooms: rooms, days:days, checkInDate: checkInDate, checkOutDate: checkOutDate});
+                navigation.navigate("Invoice", {hotel: hotel, paymentInfo: paymentInfo, userId: userId, totalPrice: totalPrice, rooms: rooms, days:days, checkInDate: checkInDate, checkOutDate: checkOutDate});
             }, (err) => {
                 console.log(err);
             });
