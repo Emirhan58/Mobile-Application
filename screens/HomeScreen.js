@@ -92,7 +92,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
 
   function onEdit(hotel){
-  
+      navigation.navigate('EditHotel', {hotel: hotel});
   }
   
   function onDelete(hotel){
@@ -129,12 +129,8 @@ export default function HomeScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      // Buraya ekran odaklandığında yapılmasını istediğiniz işlemleri yazabilirsiniz.
       fetchData();
-
-      // Unmount işlemi gerçekleştiğinde yapılacak temizleme (opsiyonel)
       return () => {
-        
       };
     }, [])
   );

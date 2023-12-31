@@ -15,13 +15,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import Global from './Global';
 import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HotelScreen() {
     const route = useRoute();
     const { hotel } = route.params;
+    const navigation = useNavigation();
 
     function handleBook(){
-
+        navigation.navigate('Check', {hotel: hotel});
     }
   return (
     <>

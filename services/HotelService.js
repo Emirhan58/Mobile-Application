@@ -42,4 +42,30 @@ export default class HotelService{
         }
     }
 
+    async EditHotel(hotel, success, error){
+        const hotelId = hotel["hotelId"];
+        const name = hotel["hotelName"];
+        const description = hotel["hotelDescription"];
+        const services = hotel["services"];
+        const location = hotel["location"];
+        const price = hotel["price"];
+
+        try{
+            firebase.firestore()
+            .collection('hotels')
+            .doc(hotelId)
+            .set({
+                name: name,
+                description: description,
+                services: services,
+                location: location,
+                price: price
+            }).then(() => {
+                return success();
+            })
+        } catch(e) {
+            return error(e);
+        }
+    }
+
 }

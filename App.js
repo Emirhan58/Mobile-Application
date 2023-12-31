@@ -13,6 +13,8 @@ import ProfileScreen from './screens/ProfileScreen';
 import { Ionicons, MaterialIcons  } from '@expo/vector-icons';
 import AdminPanelScreen from './screens/AdminPanelScreen';
 import HotelScreen from './screens/HotelScreen';
+import CheckScreen from './screens/CheckScreen';
+import EditHotelScreen from './screens/EditHotelScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -84,8 +86,8 @@ function App() {
         }}
       />
       <Drawer.Screen
-        name="Hotel"
-        component={HotelScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
           drawerIcon: ({ focused, color, size }) => (
             <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
@@ -105,14 +107,32 @@ function App() {
       )}
 
       <Drawer.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Hotel"
+        component={HotelScreen}
         options={{
           drawerLabel: () => null,
           drawerIcon: () => null,
         }}
       />
+      <Drawer.Screen
+        name="EditHotel"
+        component={EditHotelScreen}
+        options={{
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+      />
+      <Drawer.Screen
+        name="Check"
+        component={CheckScreen}
+        options={{
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+      />
+
     </Drawer.Navigator>
+    
   );
 }
 
