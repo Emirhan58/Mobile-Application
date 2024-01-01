@@ -146,6 +146,7 @@ export default function HomeScreen() {
               {data.map((hotel) => (
                 <HotelItem key={hotel.id} hotel={hotel} userData={userData} onEdit={onEdit} onDelete={onDelete} navigation={navigation} />
               ))}
+              <View><Text></Text></View>
             </ScrollView>
           )
       }
