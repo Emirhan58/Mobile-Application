@@ -5,6 +5,7 @@ import Global from './Global';
 import HotelService from '../services/HotelService';
 import { Flow } from 'react-native-animated-spinkit';
 import { useFocusEffect } from '@react-navigation/native';
+import { sendNotification } from '../services/NotificationService';
 
 export default function EditHotelScreen() {
     const route = useRoute();
@@ -16,7 +17,7 @@ export default function EditHotelScreen() {
     const [ price, setPrice ] = useState(hotel.price);
     const [ location, setLocation ] = useState(hotel.location);
     const [ rooms, setRooms ] = useState('');
-    const [ availableRooms, setAvailableRooms ] = useState('');
+    const [ availableRooms, setAvailableRooms ] = useState(0);
 
     useEffect(() => {
         // Update state variables when route.params change
@@ -25,6 +26,8 @@ export default function EditHotelScreen() {
         setServices(hotel.services);
         setPrice(hotel.price);
         setLocation(hotel.location);
+        setRooms(hotel.rooms);
+        setAvailableRooms(hotel.availableRooms);
     }, [hotel]);
 
     function handleChange(name, value){
@@ -65,7 +68,7 @@ export default function EditHotelScreen() {
         const hotelService = new HotelService();
         const hotelId = hotel.id;
         hotelService.EditHotel({hotelId ,hotelName , hotelDescription, services, location, price, rooms, availableRooms },  () => {
-            alert('Hotel Edited');
+            sendNotification("Hotel Edited!");
             setLoading(false);
         }, (err) => {
             alert(`${err}`);
@@ -142,6 +145,7 @@ export default function EditHotelScreen() {
                 <View style={styles.inputcontainer}>
                     <TextInput placeholder={"Rooms"}
                         style={styles.input}
+                        value={rooms}
                         placeholderTextColor={"#CCC"}
                         onChangeText={(value) => {
                             handleChange("rooms", value);
@@ -151,6 +155,7 @@ export default function EditHotelScreen() {
                 <View style={styles.inputcontainer}>
                     <TextInput placeholder={"Available Rooms"}
                         style={styles.input}
+                        value={`${availableRooms}`}
                         placeholderTextColor={"#CCC"}
                         onChangeText={(value) => {
                             handleChange("availableRooms", value);

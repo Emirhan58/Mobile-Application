@@ -5,6 +5,7 @@ import HotelService from '../services/HotelService';
 import { CreditCardInput } from 'react-native-credit-card-input';
 import { firebase, db } from '../config';
 import { useNavigation } from '@react-navigation/native';
+import { sendNotification } from '../services/NotificationService';
 
 export default function Payment() {
     const route = useRoute();
@@ -15,15 +16,17 @@ export default function Payment() {
         setPaymentInfo(formData);
     };
 
-    const handleBookPress = () => {
+    const handleBookPress = async () => {
         if(paymentInfo.valid){
             const hotelService = new HotelService();
             const user = firebase.auth().currentUser;
             const userId = user.uid;
             hotelService.CreateReservation({ hotel: hotel, paymentInfo: paymentInfo, userId: userId, totalPrice: totalPrice, rooms: rooms, days:days, checkInDate: checkInDate, checkOutDate: checkOutDate},  () => {
-                navigation.navigate("Invoice", {hotel: hotel, paymentInfo: paymentInfo, userId: userId, totalPrice: totalPrice, rooms: rooms, days:days, checkInDate: checkInDate, checkOutDate: checkOutDate});
+              sendNotification("Reservation Created!");  
+              navigation.navigate("Invoice", {hotel: hotel, paymentInfo: paymentInfo, userId: userId, totalPrice: totalPrice, rooms: rooms, days:days, checkInDate: checkInDate, checkOutDate: checkOutDate});
+                
             }, (err) => {
-                console.log(err);
+                alert(`${err}`);
             });
         }
         else{

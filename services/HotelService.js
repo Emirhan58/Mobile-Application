@@ -1,5 +1,5 @@
 import { firebase, db } from '../config';
-import { collection, doc, setDoc, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc, addDoc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 export default class HotelService{
       
@@ -77,8 +77,7 @@ export default class HotelService{
             return error(e);
         }
     }
-
-    async CreateReservation(object, success, error){
+    async CreateReservation(object, success, error) {
         const hotel = object["hotel"];
         const paymentInfo = object["paymentInfo"];
         const userId = object["userId"];
@@ -87,9 +86,11 @@ export default class HotelService{
         const checkInDate = object["checkInDate"];
         const checkOutDate = object["checkOutDate"];
         const totalPrice = object["totalPrice"];
-        try{
+    
+        try {
             const reservationsCollectionRef = collection(db, 'reservations');
-            await addDoc(reservationsCollectionRef, {
+    
+            const reservationDocRef = await addDoc(reservationsCollectionRef, {
                 userId: userId,
                 hotelName: hotel.name,
                 payer: paymentInfo["values"].name,
@@ -99,13 +100,36 @@ export default class HotelService{
                 checkInDate: checkInDate,
                 checkOutDate: checkOutDate,
                 totalPrice: totalPrice
-            }).then(() => {
-                return success();
             });
+            await this.updateHotelAvailableRooms(hotel.id, rooms, reservationDocRef);
 
-        } catch(e) {
-            return error(e);
+            return success();
+        } catch (e) {
+            return error(e.message); 
         }
     }
-
+    
+    async updateHotelAvailableRooms(hotelId, bookedRooms, reservationDocRef) {
+        const hotelsCollectionRef = collection(db, 'hotels');
+        const hotelDocRef = doc(hotelsCollectionRef, hotelId);
+    
+        const hotelDocSnapshot = await getDoc(hotelDocRef);
+    
+        if (hotelDocSnapshot.exists()) {
+            const currentAvailableRooms = hotelDocSnapshot.data().availableRooms || 0;
+    
+            if (currentAvailableRooms >= bookedRooms) {
+                await updateDoc(hotelDocRef, {
+                    availableRooms: currentAvailableRooms - bookedRooms
+                });
+            } else {
+                // Rezervasyonu geri al
+                await deleteDoc(reservationDocRef);
+                throw new Error('There are not enough rooms for this reservation.');
+            }
+        } else {
+            throw new Error('Hotel is not found.');
+        }
+    }
+    
 }

@@ -77,6 +77,11 @@ export default function CheckScreen() {
       alert('Please enter room');
       return;
     }
+
+    if(rooms > hotel.availableRooms){
+      alert('There are not available rooms enough for this reservation');
+      return;
+    }
     navigation.navigate("Payment", {hotel: hotel, totalPrice: totalPrice, rooms:rooms, days:days, checkInDate: selectedCheckInDate, checkOutDate: selectedCheckOutDate});
   };
 
@@ -113,6 +118,7 @@ export default function CheckScreen() {
         />
       </View>
 
+      <Text style={styles.inputText}>Available rooms: {hotel.availableRooms}</Text>
       <Text style={styles.inputText}>Hotel price: {hotel.price}$</Text>
       <Text style={styles.inputText}>Total days: {days}</Text>
       <Text style={styles.inputText}>Total price: {hotel.price * rooms * days}$</Text>

@@ -17,7 +17,7 @@ import CheckScreen from './screens/CheckScreen';
 import EditHotelScreen from './screens/EditHotelScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import InvoiceScreen from './screens/InvoiceScreen';
-
+import * as Notifications from "expo-notifications";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -60,7 +60,24 @@ function App() {
     if (initializing) setInitializing(false);
   }
 
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+
   useEffect(() => {
+    const requestPermissions = async () => {
+      const { granted } = await Notifications.requestPermissionsAsync();
+      if (!granted) {
+      console.log("permission not granted");
+      }
+    };
+
+    requestPermissions();
+
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
