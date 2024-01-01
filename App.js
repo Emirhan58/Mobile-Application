@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState, useEffect } from 'react';
 import { createDrawerNavigator, DrawerItemList ,DrawerContentScrollView, DrawerItem  } from '@react-navigation/drawer';
 import { firebase } from './config';
-
+import { Entypo } from '@expo/vector-icons'; 
 import LoginScreen from './screens/LoginScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -18,6 +18,7 @@ import EditHotelScreen from './screens/EditHotelScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import InvoiceScreen from './screens/InvoiceScreen';
 import * as Notifications from "expo-notifications";
+import ReservationsScreen from './screens/ReservationsScreen';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -101,6 +102,15 @@ function App() {
         options={{
           drawerIcon: ({ focused, color, size }) => (
             <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Reservations"
+        component={ReservationsScreen}
+        options={{
+          drawerIcon: ({ focused, color, size }) => (
+            <Entypo name={focused ? 'star' : 'star-outlined'} size={size} color={color} />
           ),
         }}
       />
